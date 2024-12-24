@@ -1,5 +1,6 @@
 package com.myjar.jarassignment.ui.composables
 
+import android.util.Log.e
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -57,14 +58,19 @@ fun ItemListScreen(
     navigate: MutableState<String>,
     navController: NavHostController
 ) {
+
+
     val items = viewModel.listStringData.collectAsState()
 
-    if (navigate.value.isNotBlank()) {
-        val currRoute = navController.currentDestination?.route.orEmpty()
-        if (!currRoute.contains("item_detail")) {
-            navController.navigate("item_detail/${navigate.value}")
-        }
-    }
+    e("items",items.value.toString())
+
+
+//    if (navigate.value.isNotBlank()) {
+//        val currRoute = navController.currentDestination?.route.orEmpty()
+//        if (!currRoute.contains("item_detail")) {
+//            navController.navigate("item_detail/${navigate.value}")
+//        }
+//    }
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -73,7 +79,10 @@ fun ItemListScreen(
         items(items.value) { item ->
             ItemCard(
                 item = item,
-                onClick = { onNavigateToDetail(item.id) }
+                onClick = {
+                    navController.navigate("item_detail/${navigate.value}")
+//                    onNavigateToDetail(item.id)
+                }
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -88,7 +97,7 @@ fun ItemCard(item: ComputerItem, onClick: () -> Unit) {
             .padding(8.dp)
             .clickable { onClick() }
     ) {
-        Text(text = item.name, fontWeight = FontWeight.Bold, color = Color.Transparent)
+        Text(text = item.name, fontWeight = FontWeight.Bold, color = Color.White)
     }
 }
 
