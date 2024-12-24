@@ -46,7 +46,7 @@ fun AppNavigation(
         }
         composable("item_detail/{itemId}") { backStackEntry ->
             val itemId = backStackEntry.arguments?.getString("itemId")
-            ItemDetailScreen(itemId = itemId)
+            ItemDetailScreen(itemId = itemId,viewModel)
         }
     }
 }
@@ -80,6 +80,7 @@ fun ItemListScreen(
             ItemCard(
                 item = item,
                 onClick = {
+                    navigate.value= item.id
                     navController.navigate("item_detail/${navigate.value}")
 //                    onNavigateToDetail(item.id)
                 }
@@ -98,13 +99,21 @@ fun ItemCard(item: ComputerItem, onClick: () -> Unit) {
             .clickable { onClick() }
     ) {
         Text(text = item.name, fontWeight = FontWeight.Bold, color = Color.White)
+        item.data?.color?.let { Text(text = it, fontWeight = FontWeight.SemiBold, color = Color.White) }
+        item.data?.price?.let { Text(text = it.toString(), fontWeight = FontWeight.SemiBold, color = Color.White) }
+
+
     }
 }
 
 @Composable
-fun ItemDetailScreen(itemId: String?) {
+fun ItemDetailScreen(
+    itemId: String?,
+    viewModel: JarViewModel,
+) {
     // Fetch the item details based on the itemId
     // Here, you can fetch it from the ViewModel or repository
+
     Text(
         text = "Item Details for ID: $itemId",
         modifier = Modifier
